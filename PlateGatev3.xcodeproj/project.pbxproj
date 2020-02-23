@@ -17,6 +17,7 @@
 		A691883B2401CC2000D276A5 /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A691883A2401CC2000D276A5 /* VideoCapture.swift */; };
 		A691883D2401CC3C00D276A5 /* DrawingBoundingBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A691883C2401CC3C00D276A5 /* DrawingBoundingBoxView.swift */; };
 		A69188422401CD3A00D276A5 /* model_plate_turi.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = A69188412401CD3900D276A5 /* model_plate_turi.mlmodel */; };
+		A69188462402643A00D276A5 /* mainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69188452402643A00D276A5 /* mainViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		A691883A2401CC2000D276A5 /* VideoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
 		A691883C2401CC3C00D276A5 /* DrawingBoundingBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingBoundingBoxView.swift; sourceTree = "<group>"; };
 		A69188412401CD3900D276A5 /* model_plate_turi.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = model_plate_turi.mlmodel; sourceTree = "<group>"; };
+		A69188452402643A00D276A5 /* mainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				A69188392401CBFC00D276A5 /* Utilities */,
 				A69188222401CB7E00D276A5 /* AppDelegate.swift */,
 				A69188242401CB7E00D276A5 /* SceneDelegate.swift */,
+				A69188452402643A00D276A5 /* mainViewController.swift */,
 				A69188262401CB7E00D276A5 /* ViewController.swift */,
 				A691882E2401CB7F00D276A5 /* Assets.xcassets */,
 				A69188302401CB7F00D276A5 /* LaunchScreen.storyboard */,
@@ -173,6 +176,7 @@
 				A69188422401CD3A00D276A5 /* model_plate_turi.mlmodel in Sources */,
 				A69188232401CB7E00D276A5 /* AppDelegate.swift in Sources */,
 				A69188252401CB7E00D276A5 /* SceneDelegate.swift in Sources */,
+				A69188462402643A00D276A5 /* mainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

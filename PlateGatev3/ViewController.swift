@@ -11,19 +11,13 @@ import Vision
 import AVKit
 import CoreMedia
 
+
 class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDelegate {
     
-    // MARK: - Vision Properties
     var request: VNCoreMLRequest?
     var OcrRequest: VNRecognizeTextRequest?
     var visionModel: VNCoreMLModel?
     var isInferencing = false
-    
-    
-    
-    
-            
-    // MARK: - AV Property
     var correctResponse = "0"
     var videoCapture: VideoCapture!
     let semaphore = DispatchSemaphore(value: 1)
@@ -59,7 +53,23 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         setupCameraView()
         setUpCamera()
         setupBoundingBoxView()
-    }
+//        let mainviewController = mainViewController()
+//        self.present(mainviewController, animated: true, completion: nil)
+        
+     let button = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 50))
+        view.addSubview(button)
+        button.backgroundColor = .green
+        button.setTitle("Login", for: .normal)
+        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+
+          
+        }
+
+        @objc func buttonAction(sender: UIButton!) {
+            print("Button tapped")
+            let mainviewController = mainViewController()
+            self.present(mainviewController, animated: true, completion: nil)
+        }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -96,6 +106,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         }
     }
 
+    
     // MARK: - SetUp Camera preview
     func setUpCamera() {
         videoCapture = VideoCapture()
@@ -116,6 +127,7 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         }
     }
     
+   
     fileprivate func setupCameraView() {
         view.addSubview(videoPreview)
 //        videoPreview.s
