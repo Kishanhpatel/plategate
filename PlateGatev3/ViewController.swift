@@ -18,9 +18,12 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
     var OcrRequest: VNRecognizeTextRequest?
     var visionModel: VNCoreMLModel?
     var isInferencing = false
-    var correctResponse = "0"
+    var correctResponse = [""]
     var videoCapture: VideoCapture!
     let semaphore = DispatchSemaphore(value: 1)
+    
+    var history = ["", "", "", "", "", "", "", "", "", "", ""]
+    var historyCount = 0;
     
     let videoPreview: UIView = {
        let view = UIView()
@@ -36,18 +39,38 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
 
     let identifierLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .white
+        //label.backgroundColor = .white
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .green
-        label.font = UIFont(name: "Avenir", size: 30)
+        label.font = UIFont(name: "Avenir", size: 38)
         return label
     }()
+    
+     let nameLabel: UILabel = {
+           let label = UILabel()
+           //label.backgroundColor = .white
+           label.textAlignment = .center
+           label.translatesAutoresizingMaskIntoConstraints = false
+           label.textColor = .white
+           label.font = UIFont(name: "Avenir", size: 30)
+           return label
+       }()
+    
+     let plateLabel: UILabel = {
+         let label = UILabel()
+         label.textAlignment = .center
+         label.translatesAutoresizingMaskIntoConstraints = false
+         label.textColor = .white
+         label.font = UIFont(name: "Avenir", size: 30)
+         return label
+     }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = #colorLiteral(red: 0.1393741071, green: 0.1393741071, blue: 0.1393741071, alpha: 1)
         setUpModel()
         setupLabel()
         setupCameraView()
@@ -56,9 +79,9 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
 //        let mainviewController = mainViewController()
 //        self.present(mainviewController, animated: true, completion: nil)
         
-     let button = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 50))
+     let button = UIButton(frame: CGRect(x: 25, y: 30, width: 80, height: 30))
         view.addSubview(button)
-        button.backgroundColor = .green
+        button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
         button.setTitle("Login", for: .normal)
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
 
@@ -66,9 +89,10 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         }
 
         @objc func buttonAction(sender: UIButton!) {
-            print("Button tapped")
+            //print("Button tapped")
             let mainviewController = mainViewController()
             self.present(mainviewController, animated: true, completion: nil)
+            sender.setTitle("", for: .normal)
         }
     
     override func didReceiveMemoryWarning() {
@@ -154,7 +178,17 @@ class ViewController: UIViewController , AVCaptureVideoDataOutputSampleBufferDel
         identifierLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -0).isActive = true
         identifierLabel.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         identifierLabel.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        identifierLabel.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        identifierLabel.heightAnchor.constraint(equalToConstant: 190).isActive = true
+        view.addSubview(nameLabel)
+        nameLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -0).isActive = true
+        nameLabel.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        nameLabel.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        nameLabel.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        view.addSubview(plateLabel)
+        plateLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -0).isActive = true
+        plateLabel.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        plateLabel.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        plateLabel.heightAnchor.constraint(equalToConstant: 60).isActive = true
     }
 
 }
@@ -249,11 +283,41 @@ extension ViewController {
                             
                             //if (recognizedText.string.range(of:  #"\b[[A-Z0-9][A-Z0-9][A-Z0-9][\.\s]?[A-Z0-9][A-Z0-9][A-Z0-9]]\b"#, options: .regularExpression) != nil){
                             if (myString != modString) {
-                                self.identifierLabel.text = modString
                                 
                                 
-                                let en3 = modString
-                                let url = URL(string: "http://plategate.tech/check.php?plate=\(en3)")
+                               self.history[self.historyCount] = modString
+                                self.historyCount = self.historyCount + 1
+                                if (self.historyCount > 10) {
+                                    self.historyCount = 0
+                                }
+                                var sum = 0
+                                var i = 0
+                                var totals = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                var top = ""
+                                for hist1 in self.history {
+                                    var match = 0
+                                    for hist2 in self.history{
+                                        if (hist1 == hist2) {
+                                            match += 1
+                                        }
+                                    }
+                                    totals[i] = match
+                                    i = i + 1
+                                }
+                                i = 0
+                                for t in totals {
+                                    if (t == totals.max()) {
+                                        top = self.history[i]
+                                    }
+                                }
+                                self.plateLabel.text = top
+                                
+                                
+                                //self.plateLabel.text = top
+                                
+                                let en3 = top
+                                //print(token)
+                                let url = URL(string: "http://plategate.tech/check.php?token=\(token)&plate=\(en3)")
 
                                 guard let requestUrl = url else{ fatalError() }
                                 var request = URLRequest(url: requestUrl)
@@ -263,22 +327,35 @@ extension ViewController {
                                     // Check if Error took place
                                     
                                     if let data = data, let dataString = String(data: data, encoding: .utf8) {
-                                        self.correctResponse = dataString
+                                        self.correctResponse = dataString.components(separatedBy: ",")
                                     }
                                     
                                 }
                                 task.resume()
-                                if (self.correctResponse == "1") {
+                                
+                                if (self.correctResponse[0] == "1") {
                                     //print("in set")
-                                    self.BoundingBoxView.matchColor = 1
+                                    if (token != "") {
+                                      self.BoundingBoxView.matchColor = 1
+                                      self.identifierLabel.text = "AUTHORIZED"
+                                      self.identifierLabel.textColor = .white
+                                      self.view.backgroundColor = .green
+                                      self.nameLabel.text = self.correctResponse[1]
+                                    }
+                                    
+                                    //print(self.correctResponse[1])
 //                                    self.identifierLabel.textColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
                                     
                                     
                                 } else {
                                     //print("not in sent")
-                                    
-                                    self.BoundingBoxView.matchColor = 0
-//                                    self.identifierLabel.textColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
+                                    if (token != "") {
+                                      self.BoundingBoxView.matchColor = 0
+                                      self.identifierLabel.text = "UNAUTHORIZED"
+                                      self.nameLabel.text = ""
+                                      self.view.backgroundColor = .red
+                                    }
+//                                  self.identifierLabel.textColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
                                     
                                     
                                     
